@@ -11,7 +11,7 @@ function escrever(caminho, conteudo){
 })
 }
 var obj =[]
-fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque1.csv"))
+fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque2.csv"))
   .pipe(parse({ delimiter: ";",columns:true , from_line: 1 }))
   .on("data", function (row) {
     
@@ -19,7 +19,7 @@ fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque1.csv"))
     let a = (data - 25569) * 86400 * 1000
     let datta =  new Date(a)
     row.id_vagao = 2
-    row.tipo_choque = "1"
+    row.tipo_choque = "2"
     var x = row
     console.log();
     obj.push(row)
