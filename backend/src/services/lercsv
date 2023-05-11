@@ -1,0 +1,61 @@
+const fs = require("fs");
+const { parse } = require("csv-parse");
+const {resolve} = require('path')
+const sqlite = require('sqlite3').verbose()
+const db = new sqlite.Database(resolve(__dirname,"..","database","bd_teste.db"))
+console.log(resolve(__dirname,"..","database","bd_teste.bd"))
+const caminhos = resolve(__dirname,'teste.json')
+function escrever(caminho, conteudo){
+  fs.promises.writeFile(caminho,conteudo, {
+  flag:'w',
+})
+}
+var obj =[]
+fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque1.csv"))
+  .pipe(parse({ delimiter: ";",columns:true , from_line: 1 }))
+  .on("data", function (row) {
+    
+    const data = parseFloat(row['Data/Hora'])
+    let a = (data - 25569) * 86400 * 1000
+    let datta =  new Date(a)
+    row.id_vagao = 2
+    row.tipo_choque = "1"
+    var x = row
+    console.log();
+    obj.push(row)
+    console.log(row)
+    let keys =[]
+    for(let i =0; i<1; i++){
+        Object.keys(row).forEach((value)=>{
+        keys.push(value)
+    }) 
+    }
+    console.log(Object.values(row))
+    console.log(keys.join(','))
+    let values = Object.values(row).map(value =>{
+        return value.toString().replace(',','.')
+    })
+    let map = values.map(value =>{
+        if(/[a-zA-Z]/.test(value)){
+            return `"${value}"`
+        }
+        return parseFloat(value)
+    })
+    console.log(map)
+    var sql = `INSERT into choque(${keys.join(',')}) values(${map.join(',')})`
+    db.all(sql,[],(err,row)=>{
+        if(err){
+            return console.log(err)
+        }
+        console.log('sucesso')
+    })
+    console.log(sql)
+  })
+  .on("end", function () {
+    console.log("finished");
+    
+  })
+  .on("error", function (error) {
+    console.log(error.message);
+  });
+ 
