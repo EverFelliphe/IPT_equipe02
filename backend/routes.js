@@ -1,15 +1,10 @@
-var express = require("express");
-var app = express();
-var port = process.env.PORT || 3000;
-var bodyParser = require('body-parser');
-var sqlite3 = require('sqlite3').verbose();
-var DBPATH = './testavel_usuariosDB.db';
+const {Router} = require('express')
+const routes = Router();
+var {resolve} = require('path')
+const sqlite3 = require('sqlite3').verbose()
+var DBPATH = resolve(__dirname,'src','database','banco_de_dados_ipt_grupo02.db');
 var db = new sqlite3.Database(DBPATH);
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-app.get("/login", function(req,res)
+routes.get("/login", function(req,res)
 {
     res.header("Access-Control-Allow-Origin", "*");
     var usuario = req.body.usuario;
@@ -31,10 +26,10 @@ app.get("/login", function(req,res)
     });
 });
 
-app.get("/todos", function(req,res){
+routes.get("/todos", function(req,res){
     res.header("Access-Control-Allow-Origin", "*");
     
-    db.all(`SELECT * FROM tbUsuarios`, [], (err, rows)=>
+    db.all(`SELECT * FROM user`, [], (err, rows)=>
     {
         if(err)
         {
@@ -44,7 +39,7 @@ app.get("/todos", function(req,res){
     });
 });
 
-app.post("/criarUsuario", function(req,res){
+routes.post("/criarUsuario", function(req,res){
     res.header("Access-Control-Allow-Origin", "*");
     var usuario = req.body.usuario;
     var senha = req.body.senha;
@@ -63,7 +58,7 @@ app.post("/criarUsuario", function(req,res){
     });
 });
 
-app.put("/atualizaUsuario", function(req,res){
+routes.put("/atualizaUsuario", function(req,res){
     res.header("Access-Control-Allow-Origin", "*");
     var id = req.body.id;
     var usuario = req.body.usuario;
@@ -82,7 +77,7 @@ app.put("/atualizaUsuario", function(req,res){
     });
 });
 
-app.delete("/deletarUsuario", function(req,res){
+routes.delete("/deletarUsuario", function(req,res){
     res.header("Access-Control-Allow_Origin", "*");
     var id = req.body.id;
     sql = `DELETE FROM tbUsuarios WHERE id=${id}`
@@ -98,7 +93,7 @@ app.delete("/deletarUsuario", function(req,res){
     });
 });
 
-app.get("/perfil", function(req,res){
+routes.get("/perfil", function(req,res){
     res.header("Access-Control-Allow-Origin", "*");
     var id = req.body.id;
     sql = `SELECT * FROM tbUsuarios WHERE id="${id}"`
@@ -118,8 +113,4 @@ app.get("/perfil", function(req,res){
         
     });
 });
-
-app.listen(port, () =>
-{
-    console.log(`Servidor rodando na porta ${port}`);
-})
+module.exports = routes;
