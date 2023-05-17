@@ -1,17 +1,38 @@
 const fs = require("fs");
 const { parse } = require("csv-parse");
+const csv = require('csv-parse')
 const {resolve} = require('path')
 const sqlite = require('sqlite3').verbose()
-const db = new sqlite.Database(resolve(__dirname,"..","database","bd_teste.db"))
-console.log(resolve(__dirname,"..","database","bd_teste.bd"))
+const db = new sqlite.Database(resolve(__dirname,"..","database","banco_de_dados_ipt_grupo02.db"))
+
 const caminhos = resolve(__dirname,'teste.json')
 function escrever(caminho, conteudo){
   fs.promises.writeFile(caminho,conteudo, {
   flag:'w',
 })
 }
-var obj =[]
-fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque2.csv"))
+const data = [
+  { name: 'João', age: 30, city: 'São Paulo' },
+  { name: 'Maria', age: 25, city: 'Rio de Janeiro' },
+  { name: 'Pedro', age: 40, city: 'Belo Horizonte' }
+];
+
+
+
+const stream = fs.createWriteStream('data.csv', { flags: 'a' });
+const headers = ['name', 'age', 'city'];
+function escrever (caminho,data,headers){
+  const stream = fs.createWriteStream(caminho, { flags: 'a' });
+  stream.write(headers.join(';') + '\n');
+  const dados = Object.values(data)
+  stream.write(dados.join(';') + '\n')
+}
+escrever(resolve(__dirname,"..","..","data","E","teste.csv",),{ name: 'João', age: 30, city: 'São Paulo' },headers)
+console.log('Arquivo CSV escrito com sucesso!');
+
+const caminho = resolve(__dirname,"..","..","data","E","pico.csv")
+function armazenar(arquivo, tabela){
+  fs.createReadStream(arquivo)
   .pipe(parse({ delimiter: ";",columns:true , from_line: 1 }))
   .on("data", function (row) {
     
@@ -19,10 +40,9 @@ fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque2.csv"))
     let a = (data - 25569) * 86400 * 1000
     let datta =  new Date(a)
     row.id_vagao = 2
-    row.tipo_choque = "2"
+    row.tipo_choque = "3"
     var x = row
     console.log();
-    obj.push(row)
     console.log(row)
     let keys =[]
     for(let i =0; i<1; i++){
@@ -42,7 +62,7 @@ fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque2.csv"))
         return parseFloat(value)
     })
     console.log(map)
-    var sql = `INSERT into choque(${keys.join(',')}) values(${map.join(',')})`
+    var sql = `INSERT into ${tabela}(${keys.join(',')}) values(${map.join(',')})`
     db.all(sql,[],(err,row)=>{
         if(err){
             return console.log(err)
@@ -58,4 +78,6 @@ fs.createReadStream(resolve(__dirname,"..","..","data","E","Choque2.csv"))
   .on("error", function (error) {
     console.log(error.message);
   });
- 
+}
+
+ armazenar(caminho,'pico')
