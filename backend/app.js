@@ -5,6 +5,7 @@ var {resolve} = require('path')
 const routes = require('./routes')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("../frontend/"));
 app.use(routes);
 
 

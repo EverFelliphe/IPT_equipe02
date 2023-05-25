@@ -27,11 +27,27 @@ function escrever (caminho,data,headers){
   const dados = Object.values(data)
   stream.write(dados.join(';') + '\n')
 }
-escrever(resolve(__dirname,"..","..","data","E","teste.csv",),{ name: 'João', age: 30, city: 'São Paulo' },headers)
-console.log('Arquivo CSV escrito com sucesso!');
+// escrever(resolve(__dirname,"..","..","data","E","teste.csv",),{ name: 'João', age: 30, city: 'São Paulo' },headers)
+// console.log('Arquivo CSV escrito com sucesso!');
 
-const caminho = resolve(__dirname,"..","..","data","E","pico.csv")
-function armazenar(arquivo, tabela){
+
+exports.tratar_csv = function(data){
+  const readableStream = require('stream').Readable;
+  const stream = new readableStream();
+  const results = [];
+  stream.push(data);
+  stream.push(null);
+  stream
+  csv({ separator: ';' })
+  .on('data', (data) => results.push(data))
+  .on('end', () => {
+      // Término da leitura do arquivo CSV
+      return results
+      
+  });
+}
+
+armazenar = function (arquivo, tabela){
   fs.createReadStream(arquivo)
   .pipe(parse({ delimiter: ";",columns:true , from_line: 1 }))
   .on("data", function (row) {
@@ -80,4 +96,4 @@ function armazenar(arquivo, tabela){
   });
 }
 
- armazenar(caminho,'pico')
+ 
