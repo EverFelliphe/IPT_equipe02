@@ -1,17 +1,25 @@
-const {Router} = require('express')
+const { Router } = require('express')
 const routes = Router();
 const PicosController = require('./src/controllers/PicosController')
 const LoginController = require('./src/controllers/LoginController')
 const ChoquesController = require('./src/controllers/ChoqueController')
-const UserController = require('./src/controllers/UserController') 
-const RelatorioController = require('./src/controllers/relatoriosController') 
+const UserController = require('./src/controllers/UserController')
+const RelatorioController = require('./src/controllers/relatoriosController')
 
 
 // Endpoints **REDIRECT
 routes.get('/meus_projetos', (req, res) => {
     // Redirect para a página "Meus projetos"
-    
+
     res.redirect(`/pagina_inicial.html?user_id=${req.query.user_id}`)
+})
+routes.get('/relatorio_completo', (req, res) => {
+    // Redirect para a página "projeto"
+    res.redirect(`/relatorio-pdf.html?id=${req.query.id}`)
+})
+routes.get('/perfil', (req, res) => {
+    // Redirect para a página "projeto"
+    res.redirect(`/perfil2.html?id=${req.query.id}`)
 })
 routes.get('/', (req, res) => {
     // Redirect para a página "login"
@@ -25,7 +33,7 @@ routes.get('/relatorio', (req, res) => {
 // Endpoints **PERFIL
 
 // Endpoints **PROJETO
-routes.get('/projeto/vagao', (req,res) => {
+routes.get('/projeto/vagao', (req, res) => {
     res.statusCode = 200;
     res.setHeader('Access-Control-Allow-Origin', '*');
     var db = new sqlite3.Database(DBPATH);
@@ -70,7 +78,7 @@ routes.get('/projeto/comparacao', (req, res) => {
 });
 
 //endpoint para a listagem de relatórios
-routes.get('/projeto/relatorio', RelatorioController.show_relatorios );
+routes.get('/projeto/relatorio', RelatorioController.show_relatorios);
 //endpoints para as viagens
 routes.get('/projetos/salvos', (req, res) => {
     res.statusCode = 200;
@@ -86,20 +94,20 @@ routes.get('/projetos/salvos', (req, res) => {
     db.close();
 });
 //endpoints do login
- routes.post("/login",LoginController.login );
- //endpoints dos usuarios
- routes.post("/criarUsuario",  UserController.criaUser);
- routes.put("/atualizaUsuario", UserController.updateUser);
- routes.delete("/deletarUsuario", UserController.deleteUser);
- routes.get("/todos", UserController.showAll);
- 
- //endpoints dos choques
- routes.get("/choque1",ChoquesController.Show_choque);
- routes.get("/choque2",ChoquesController.Show_choque);
- routes.delete("/deletarChoque",ChoquesController.delete_choque );
- //endpoint do pico
- routes.get("/pico", PicosController.Show_Pico);
- 
+routes.post("/login", LoginController.login);
+//endpoints dos usuarios
+routes.post("/criarUsuario", UserController.criaUser);
+routes.put("/atualizaUsuario", UserController.updateUser);
+routes.delete("/deletarUsuario", UserController.deleteUser);
+routes.get("/todos", UserController.showAll);
+
+//endpoints dos choques
+routes.get("/choque1", ChoquesController.Show_choque);
+routes.get("/choque2", ChoquesController.Show_choque);
+routes.delete("/deletarChoque", ChoquesController.delete_choque);
+//endpoint do pico
+routes.get("/pico", PicosController.Show_Pico);
+
 
 
 routes.get("/perfil", UserController.showUser);

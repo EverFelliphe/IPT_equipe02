@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="/assets/css/relatorio-pdf.css">
+    <link rel="stylesheet" href="/Frontend/assets/css/relatorio-pdf.css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                <a class="nav-link active" aria-current="page" href="#" id="">Home</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -146,6 +146,11 @@
                 window.location.href = "https://drive.google.com/file/d/1u6btHjyZ-ks7QTC3JkveNZRCwpaQ_6GB/view";
             });
         });
+        $(document).ready(function () {
+            $('#botaoir').click(function () {
+                window.location.href = `/meus_projetos?user_id=${data.id}`
+            })
+        })
     </script>
 </body>
 
